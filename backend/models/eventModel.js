@@ -13,7 +13,11 @@ const eventSchema = new Schema({
         default: 'pending'
     },
     fundRequest: { type: Number, default: 0 },
-    approvedFund: { type: Number, default: 0 }
+    approvedFund: { type: Number, default: 0 },
+    registrationFee: { type: Number, default: 0 },
+    registeredStudents: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
+    isCompleted: { type: Boolean, default: false },
+    eventImages: [{ type: String }]
     
 });
 

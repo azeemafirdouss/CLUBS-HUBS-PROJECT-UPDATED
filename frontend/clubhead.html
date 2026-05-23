@@ -12,16 +12,28 @@
       font-family: 'Inter', sans-serif;
     }
     
-    /* .sidebar {
-      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-    } */
-         .sidebar{
-  background: linear-gradient(180deg, #1e3a8a 0%, #2563eb 100%);
-}
+    .sidebar {
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    }
+    
+    .nav-item {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-left: 4px solid transparent;
+      color: #94a3b8;
+      cursor: pointer;
+    }
+    
+    .nav-item:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+      color: #f8fafc;
+      transform: translateX(4px);
+    }
     
     .nav-item.active {
-      background-color: rgba(255, 255, 255, 0.08);
-      border-left: 3px solid #3b82f6;
+      background-color: rgba(59, 130, 246, 0.15) !important;
+      border-left: 4px solid #3b82f6 !important;
+      color: #3b82f6 !important;
+      font-weight: 600;
     }
     
     .stats-card {
@@ -106,6 +118,7 @@
           </svg>
           Events
         </a>
+
       </nav>
     </aside>
 
@@ -182,6 +195,19 @@
               </svg>
               Create Event
             </button>
+          </div>
+
+          <!-- Broadcast Announcement -->
+          <div class="content-card rounded-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <span class="mr-2">📢</span> Broadcast Announcement to Students
+            </h3>
+            <form id="announcementForm" class="flex gap-4">
+              <input type="text" id="announcementMessage" required class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g. Auditions for the Mudra club are starting tomorrow at 4 PM in Seminar Hall!">
+              <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center whitespace-nowrap">
+                <span class="mr-2">📣</span> Broadcast
+              </button>
+            </form>
           </div>
 
           <!-- Main Content Grid -->
@@ -308,8 +334,8 @@
           <textarea name="description" required rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
         </div>
         <div class="mb-6">
-          <label class="block text-gray-700 mb-2 font-medium">Fund Request (₹)</label>
-          <input type="number" name="fundRequest" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="0" min="0">
+          <label class="block text-gray-700 mb-2 font-medium">Registration Fee (₹)</label>
+          <input type="number" name="registrationFee" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter 0 if free" min="0">
         </div>
 
         <div class="flex justify-end gap-3">
@@ -321,6 +347,63 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
             Create Event
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Registrations Modal -->
+  <div id="registrationsModal" class="fixed inset-0 modal-overlay hidden items-center justify-center z-50 p-4">
+    <div class="bg-white p-8 rounded-lg w-full max-w-lg shadow-xl max-h-[90vh] flex flex-col">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+          <span class="mr-2">📋</span> Event Registrations
+        </h3>
+        <button onclick="closeRegistrationsModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+          ×
+        </button>
+      </div>
+      <div class="overflow-y-auto flex-1 space-y-4" id="registrantsList">
+        <!-- Registrants will be loaded here -->
+      </div>
+      <div class="flex justify-end mt-6">
+        <button onclick="closeRegistrationsModal()" class="btn-secondary px-6 py-2 rounded-lg font-medium">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complete Event Modal -->
+  <div id="completeEventModal" class="fixed inset-0 modal-overlay hidden items-center justify-center z-50 p-4">
+    <div class="bg-white p-8 rounded-lg w-full max-w-md shadow-xl">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+          <span class="mr-2">📸</span> Mark Event Completed
+        </h3>
+        <button onclick="closeCompleteEventModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+          &times;
+        </button>
+      </div>
+      
+      <form id="completeEventForm">
+        <input type="hidden" id="completeEventId">
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2 font-medium">Event Memories / Photo URLs</label>
+          <p class="text-xs text-gray-500 mb-2">Enter image URLs separated by commas. These will be added to the gallery for registered students to view.</p>
+          <textarea id="completeEventImages" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="https://images.unsplash.com/photo-1..., https://images.unsplash.com/photo-2..."></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button type="button" onclick="closeCompleteEventModal()" class="btn-secondary px-6 py-3 rounded-lg font-medium">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-medium flex items-center bg-green-600 hover:bg-green-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Complete Event
           </button>
         </div>
       </form>

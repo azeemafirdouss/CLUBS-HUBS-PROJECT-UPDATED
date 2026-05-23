@@ -6,11 +6,11 @@
   <title>Registration Page</title>
   <style>
    :root {
-  --kmit-primary: #2c3e50;
+  --kmit-primary: #0f172a;
   --kmit-secondary: #3498db;
-  --kmit-accent: #e74c3c;
+  --kmit-accent: #3b82f6;
   --kmit-light: #ecf0f1;
-  --kmit-dark: #2c3e50;
+  --kmit-dark: #0f172a;
 }
 
 /* General reset */
@@ -22,50 +22,94 @@
 }
 
 body {
-  background: linear-gradient(135deg, #f8fafc, #eef3f7);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   color: #333;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
-/* Navbar Styling */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-  background-color: var(--kmit-primary);
+/* Custom Header Navbar Styles */
+.custom-navbar {
+  background-color: rgba(44, 62, 80, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 9999;
+  padding: 15px 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
 }
-
-.navbar .logo {
-  color: white;
-  padding-left: 230px;
-  font-size: 22px;
-  font-weight: 700;
+.custom-navbar .nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.custom-navbar .logo-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   text-decoration: none;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 500;
 }
-
-.navbar ul {
+.custom-navbar .logo-icon {
+  font-size: 20px;
+  color: #ffffff;
+}
+.custom-navbar .logo-bold {
+  font-weight: 700;
+}
+.custom-navbar .nav-links {
   display: flex;
   list-style: none;
-  gap: 24px;
+  gap: 5px;
   margin: 0;
-  padding-right: 230px;
+  padding: 0;
+  align-items: center;
 }
-
-.navbar ul li a {
-  color: gainsboro;
+.custom-navbar .nav-link-item {
+  color: #e2e8f0;
   text-decoration: none;
   font-size: 16px;
-  transition: 0.3s;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  display: inline-block;
 }
-
-.navbar ul li a:hover {
-  color: var(--kmit-accent);
+.custom-navbar .nav-link-item:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.custom-navbar .nav-link-item.active {
+  background-color: #3b82f6;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+@media (max-width: 768px) {
+  .custom-navbar .nav-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .custom-navbar .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .custom-navbar .nav-link-item {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
 }
 
 /* Page Center */
@@ -81,11 +125,13 @@ body {
 .container {
   background: #ffffff;
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   width: 420px;
   padding: 40px 36px;
   text-align: center;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 10;
 }
 
 .container h2 {
@@ -145,7 +191,7 @@ button {
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(90deg, #3498db, #2980b9);
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
   color: white;
   font-weight: 600;
   font-size: 16px;
@@ -155,7 +201,7 @@ button {
 }
 
 button:hover {
-  background: linear-gradient(90deg, #3ba4e0, #1f6ea5);
+  background: linear-gradient(90deg, #2563eb, #1e40af);
   transform: scale(1.03);
 }
 
@@ -166,7 +212,7 @@ button:disabled {
 
 /* Error and success messages */
 .error-message {
-  color: #e74c3c;
+  color: #64748b;
   font-size: 13px;
   margin-top: 6px;
   text-align: left;
@@ -205,17 +251,21 @@ button:disabled {
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <a href="#" class="logo">KMIT Clubs Hub</a>
-    
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="register.html">Register</a></li>
-      <li><a href="login.html">Login</a></li>
-      <li><a href="clubs.html">Clubs</a></li>
-      <li><a href="event.html">Events</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
+  <nav class="custom-navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo-link">
+        <i class="fas fa-users logo-icon"></i>
+        <span>KMIT <span class="logo-bold">Clubs Hub</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link-item">Home</a></li>
+        <li><a href="register.html" class="nav-link-item active">Register</a></li>
+        <li><a href="login.html" class="nav-link-item">Login</a></li>
+        <li><a href="clubs.html" class="nav-link-item">Clubs</a></li>
+        <li><a href="event.html" class="nav-link-item">Events</a></li>
+        <li><a href="about.html" class="nav-link-item">About</a></li>
+      </ul>
+    </div>
   </nav>
   <div class="page">
     <div class="container">
@@ -241,8 +291,8 @@ button:disabled {
 
           <label for="studentPassword">Password:</label>
           <input type="password" id="studentPassword" name="studentPassword"
-                 minlength="10" maxlength="10" oninput="validateStudentPassword(this)"/>
-          <small class="hint">Must be exactly same as Roll No (10 chars)</small>
+                 minlength="8" maxlength="64" oninput="validateStudentPassword(this)"/>
+          <small class="hint">Min 8 chars: 1 uppercase, 1 lowercase, 1 number, 1 special character</small>
           <span class="error-message" id="studentPasswordError"></span>
         </div>
 
@@ -262,16 +312,16 @@ button:disabled {
         </div>
 
         <!-- Club Head Fields -->
-   <!-- Club Head Fields -->
-<!-- Club Head Fields -->
 <div id="clubHeadFields" style="display:none;">
     <label for="clubUsername">Club Username:</label>
-    <input type="text" id="clubUsername" name="clubUsername" placeholder="Mudra-Head"/>
+    <input type="text" id="clubUsername" name="clubUsername" placeholder="Mudra-Head" oninput="validateClubUsername(this)"/>
     <small class="hint">Format: Clubname-Head (e.g., Mudra-Head)</small>
+    <span class="error-message" id="clubUsernameError"></span>
 
     <label for="clubPassword">Password:</label>
-    <input type="password" id="clubPassword" name="clubPassword"/>
+    <input type="password" id="clubPassword" name="clubPassword" oninput="validateClubPassword(this)"/>
     <small class="hint">At least 8 characters with upper, lower, number, and special character</small>
+    <span class="error-message" id="clubPasswordError"></span>
 </div>
         <!-- Faculty Fields -->
         <div id="facultyFields" style="display:none;">
@@ -305,6 +355,10 @@ button:disabled {
   </div>
 
   <script>
+    const API_BASE = (window.location.protocol === 'file:')
+      ? 'http://localhost:5000'
+      : window.location.origin;
+
     // Role selection handler
     const roleSelect = document.getElementById("role");
     const studentFields = document.getElementById("studentFields");
@@ -341,7 +395,7 @@ button:disabled {
     const manual = document.getElementById('clubManualInput');
     try {
       // const res = await fetch('/clubs');
-      const res = await fetch('https://clubs-hubs-projectazeema.onrender.com/clubs');
+      const res = await fetch(API_BASE + '/clubs');
       const clubs = await res.json();
 
       if (!Array.isArray(clubs) || clubs.length === 0) {
@@ -411,10 +465,36 @@ button:disabled {
 
     function validateStudentPassword(input) {
         const errorSpan = document.getElementById('studentPasswordError');
-        const rollNo = document.getElementById('studentUsername').value;
+        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
         
-        if (input.value !== rollNo) {
-            errorSpan.textContent = 'Password must match Roll No';
+        if (!pattern.test(input.value)) {
+            errorSpan.textContent = 'Password must be min 8 chars: 1 uppercase, 1 lowercase, 1 number, 1 special character';
+            return false;
+        } else {
+            errorSpan.textContent = '';
+            return true;
+        }
+    }
+
+    function validateClubUsername(input) {
+        const errorSpan = document.getElementById('clubUsernameError');
+        const pattern = /^[A-Za-z0-9\s-]+-Head$/i;
+        
+        if (!pattern.test(input.value)) {
+            errorSpan.textContent = 'Invalid club username format. Use: Clubname-Head';
+            return false;
+        } else {
+            errorSpan.textContent = '';
+            return true;
+        }
+    }
+
+    function validateClubPassword(input) {
+        const errorSpan = document.getElementById('clubPasswordError');
+        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+        
+        if (!pattern.test(input.value)) {
+            errorSpan.textContent = 'Password must contain uppercase, lowercase, number, and special character (min 8 chars)';
             return false;
         } else {
             errorSpan.textContent = '';
@@ -503,14 +583,8 @@ button:disabled {
             isValid = validateAdminId(document.getElementById('adminId')) && 
                      validateAdminPassword(document.getElementById('adminPassword'));
         } else if (role === "clubhead") {
-            // ✅ NO VALIDATION - JUST CHECK IF FIELDS ARE NOT EMPTY
-            const clubUsername = document.getElementById('clubUsername');
-            const clubPassword = document.getElementById('clubPassword');
-            isValid = clubUsername.value.trim() !== '' && clubPassword.value.trim() !== '';
-            if (!isValid) {
-                formMessage.textContent = 'Please fill in all fields';
-                return;
-            }
+            isValid = validateClubUsername(document.getElementById('clubUsername')) && 
+                      validateClubPassword(document.getElementById('clubPassword'));
         } else if (role === "faculty") {
             isValid = validateFacultyName(document.getElementById('facultyName')) && 
                      validateFacultyEmail(document.getElementById('facultyEmail')) && 
@@ -562,7 +636,7 @@ button:disabled {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Registering...';
 
-        fetch("https://clubs-hubs-projectazeema.onrender.com/register", {
+        fetch(API_BASE + "/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)

@@ -13,6 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
         eventForm.addEventListener('submit', createEvent);
     }
 
+    // Attach complete event form submission handler
+    const completeEventForm = document.getElementById('completeEventForm');
+    if (completeEventForm) {
+        completeEventForm.addEventListener('submit', submitCompleteEvent);
+    }
+
+    // Attach announcement form submission handler
+    const announcementForm = document.getElementById('announcementForm');
+    if (announcementForm) {
+        announcementForm.addEventListener('submit', broadcastAnnouncement);
+    }
+
+
+
     // 3. Setup navigation
     setupNavigation();
 });
@@ -67,10 +81,10 @@ function setupNavigation() {
             const sectionId = this.getAttribute('data-section');
             
             // Remove active class from all nav items
-            navItems.forEach(nav => nav.classList.remove('active-nav'));
+            navItems.forEach(nav => nav.classList.remove('active'));
             
             // Add active class to clicked nav item
-            this.classList.add('active-nav');
+            this.classList.add('active');
             
             // Hide all sections
             sections.forEach(section => section.classList.remove('active'));
@@ -82,6 +96,8 @@ function setupNavigation() {
             if (sectionId === 'members' && window.dashboardData) {
                 renderMembersSection(window.dashboardData.members);
             }
+            
+
         });
     });
 }
@@ -183,11 +199,15 @@ async function renderEventsSection() {
     list.innerHTML = events.map(event => {
         let statusColor = 'bg-yellow-100 text-yellow-800';
         let statusIcon = '⏰';
-        if (event.status === 'approved') {
+        let statusText = event.status.charAt(0).toUpperCase() + event.status.slice(1);
+        if (event.isCompleted) {
+            statusColor = 'bg-indigo-100 text-indigo-800 border border-indigo-300';
+            statusIcon = '🎓';
+            statusText = 'Completed';
+        } else if (event.status === 'approved') {
             statusColor = 'bg-green-100 text-green-800';
             statusIcon = '✅';
-        }
-        if (event.status === 'rejected') {
+        } else if (event.status === 'rejected') {
             statusColor = 'bg-red-100 text-red-800';
             statusIcon = '❌';
         }
@@ -214,6 +234,22 @@ async function renderEventsSection() {
             </div>` : 
             '';
 
+        const regButton = event.status === 'approved' ? `
+            <button onclick="viewRegistrations('${event._id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-semibold mr-2 transition-colors">
+                👤 View Registrations
+            </button>
+        ` : '';
+        const completeButton = (event.status === 'approved' && !event.isCompleted) ? `
+            <button onclick="openCompleteEventModal('${event._id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-semibold mr-2 transition-colors">
+                📸 Complete Event
+            </button>
+        ` : '';
+        const deleteButton = `
+            <button onclick="deleteEvent('${event._id}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-colors">
+                🗑️ Delete Event
+            </button>
+        `;
+
         return `
         <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all duration-200">
             <div class="flex justify-between items-start mb-4">
@@ -223,14 +259,22 @@ async function renderEventsSection() {
                     <div class="flex items-center text-gray-500 text-sm">
                         <span class="mr-2">📅</span>
                         ${new Date(event.date).toLocaleDateString()} at ${new Date(event.date).toLocaleTimeString()}
+                        <span class="mx-3">|</span>
+                        <span class="mr-2">🎟️</span>
+                        Fee: ₹${event.registrationFee || 0}
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 ${statusColor} px-3 py-1 rounded-full text-sm font-medium ml-4">
                     <span>${statusIcon}</span>
-                    <span>${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span>
+                    <span>${statusText}</span>
                 </div>
             </div>
             ${fundDisplay}
+            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-end">
+                ${regButton}
+                ${completeButton}
+                ${deleteButton}
+            </div>
         </div>`;
     }).join("");
     
@@ -256,11 +300,15 @@ async function loadMyEventStatus() {
     list.innerHTML = events.map(event => {
         let statusColor = 'text-yellow-600';
         let statusBg = 'bg-yellow-50 border-yellow-200';
-        if (event.status === 'approved') {
+        let statusText = event.status;
+        if (event.isCompleted) {
+            statusColor = 'text-indigo-600 font-bold';
+            statusBg = 'bg-indigo-50 border-indigo-200';
+            statusText = 'completed';
+        } else if (event.status === 'approved') {
             statusColor = 'text-green-600';
             statusBg = 'bg-green-50 border-green-200';
-        }
-        if (event.status === 'rejected') {
+        } else if (event.status === 'rejected') {
             statusColor = 'text-red-600';
             statusBg = 'bg-red-50 border-red-200';
         }
@@ -282,7 +330,7 @@ async function loadMyEventStatus() {
                     <p class="font-bold text-gray-800">${event.title}</p>
                     <p class="text-sm text-gray-600 mt-1">${new Date(event.date).toLocaleDateString()}</p>
                     ${fundDisplay}
-                    <p class="text-sm font-bold ${statusColor} mt-2">Status: ${event.status}</p>
+                    <p class="text-sm font-bold ${statusColor} mt-2">Status: ${statusText}</p>
                 </div>`;
     }).join("");
 }
@@ -366,7 +414,8 @@ async function createEvent(event) {
         title: form.title.value,
         description: form.description.value,
         date: form.date.value,
-        fundRequest: parseInt(form.fundRequest.value) || 0
+        fundRequest: form.fundRequest ? (parseInt(form.fundRequest.value) || 0) : 0,
+        registrationFee: parseInt(form.registrationFee.value) || 0
     };
 
     try {
@@ -405,4 +454,152 @@ function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     window.location.href = 'login.html';
+}
+
+// Broadcast announcement
+async function broadcastAnnouncement(e) {
+    e.preventDefault();
+    const messageInput = document.getElementById('announcementMessage');
+    const message = messageInput.value.trim();
+    if (!message) return;
+    
+    try {
+        const res = await apiRequest("/clubhead/announcements", "POST", { message });
+        if (res.message) {
+            alert("✅ Announcement broadcasted successfully!");
+            messageInput.value = "";
+        } else {
+            alert("Error: " + (res.error || "Failed to broadcast announcement."));
+        }
+    } catch (err) {
+        console.error("Announcement error:", err);
+        alert("Error: " + (err.message || "Failed to connect to server."));
+    }
+}
+
+// Delete Event
+async function deleteEvent(eventId) {
+    if (!confirm("Are you sure you want to delete this event? This action cannot be undone.")) return;
+    try {
+        const res = await apiRequest(`/clubhead/events/${eventId}`, "DELETE");
+        if (res.message) {
+            alert("✅ Event deleted successfully!");
+            await loadInitialDashboard();
+        } else {
+            alert("Error: " + (res.error || "Failed to delete event."));
+        }
+    } catch (err) {
+        console.error("Delete event error:", err);
+        alert("Error deleting event: " + err.message);
+    }
+}
+
+// View Registrations
+async function viewRegistrations(eventId) {
+    try {
+        const list = document.getElementById("registrantsList");
+        list.innerHTML = `
+            <div class="text-center py-8">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p class="text-gray-500 mt-2">Fetching registrations...</p>
+            </div>`;
+            
+        document.getElementById("registrationsModal").classList.remove("hidden");
+        document.getElementById("registrationsModal").classList.add("flex");
+        
+        const registrants = await apiRequest(`/clubhead/events/${eventId}/registrations`);
+        if (registrants.error) {
+            list.innerHTML = `<p class="text-red-500 text-center py-4">Error: ${registrants.error}</p>`;
+            return;
+        }
+        
+        // Defensively filter out null/undefined entries
+        const validRegistrants = (registrants || []).filter(reg => reg !== null && reg !== undefined);
+        
+        if (validRegistrants.length === 0) {
+            list.innerHTML = `
+                <div class="text-center py-8 text-gray-500">
+                    <p class="font-medium">No registrations yet.</p>
+                    <p class="text-xs text-gray-400 mt-1">Students will appear here once they register.</p>
+                </div>`;
+            return;
+        }
+        
+        list.innerHTML = validRegistrants.map(reg => {
+            const student = reg.student || {};
+            const isFree = reg.amountPaid === 0;
+            const payMethodText = reg.paymentMethod === 'phonepe' ? 'PhonePe Gateway' : reg.paymentMethod === 'upi_qr' ? 'PhonePe QR' : reg.paymentMethod === 'upi_id' ? `UPI (${reg.upiId || ''})` : reg.paymentMethod === 'legacy' ? 'Legacy' : 'Free';
+            const payDate = new Date(reg.createdAt).toLocaleString();
+            
+            return `
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-semibold text-gray-800">${student.name || student.username || 'Unknown Student'}</p>
+                            <p class="text-xs text-gray-500">Roll No: ${student.username || 'N/A'}</p>
+                            <p class="text-[10px] text-slate-400 mt-2"><i class="far fa-clock mr-1"></i>${payDate}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="${isFree ? 'bg-gray-100 text-gray-800' : 'bg-emerald-100 text-emerald-800'} text-xs font-semibold px-2.5 py-0.5 rounded-full inline-block">
+                                ${isFree ? 'Free Entry' : 'Paid ₹' + reg.amountPaid}
+                            </span>
+                            ${!isFree ? `
+                                <p class="text-[10px] text-gray-500 mt-1.5 font-mono">ID: ${reg.transactionId}</p>
+                                <p class="text-[9px] text-slate-400 font-medium">${payMethodText}</p>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+    } catch (err) {
+        console.error("Error fetching registrations:", err);
+        document.getElementById("registrantsList").innerHTML = `<p class="text-red-500 text-center py-4">Failed to load registrations.</p>`;
+    }
+}
+
+
+function closeRegistrationsModal() {
+    document.getElementById("registrationsModal").classList.add("hidden");
+    document.getElementById("registrationsModal").classList.remove("flex");
+}
+
+function openCompleteEventModal(eventId) {
+    document.getElementById("completeEventId").value = eventId;
+    document.getElementById("completeEventImages").value = "";
+    document.getElementById("completeEventModal").classList.remove("hidden");
+    document.getElementById("completeEventModal").classList.add("flex");
+}
+
+function closeCompleteEventModal() {
+    document.getElementById("completeEventModal").classList.add("hidden");
+    document.getElementById("completeEventModal").classList.remove("flex");
+}
+
+async function submitCompleteEvent(e) {
+    e.preventDefault();
+    const eventId = document.getElementById("completeEventId").value;
+    const imagesRaw = document.getElementById("completeEventImages").value;
+    
+    // Split by comma, trim, filter out empty strings
+    const eventImages = imagesRaw
+        .split(/[\n,]+/)
+        .map(url => url.trim())
+        .filter(url => url.length > 0);
+        
+    try {
+        const res = await apiRequest(`/clubhead/events/${eventId}/complete`, "POST", { eventImages });
+        if (res.message) {
+            alert("✅ Event marked as completed and memories uploaded successfully!");
+            closeCompleteEventModal();
+            // Reload dashboard to update stats and listing
+            await loadInitialDashboard();
+        } else {
+            alert("Error: " + (res.error || "Failed to mark event as completed."));
+        }
+    } catch (err) {
+        console.error("Complete event API error:", err);
+        alert("Error connecting to server: " + err.message);
+    }
 }

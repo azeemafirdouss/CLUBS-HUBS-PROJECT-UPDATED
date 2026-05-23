@@ -3,58 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FACULTECH Login</title>
+  <title>KMIT CLUBS HUBS Login</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
     body {
-      background: linear-gradient(135deg, white, white);
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       min-height: 100vh;
-      display: flex; justify-content: center; align-items: center; padding: 20px;
+      display: flex; justify-content: center; align-items: center;
+      padding: 90px 20px 40px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .error-message {
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 6px;
+      text-align: left;
+      line-height: 1.4;
+      display: block;
     }
     .container {
       display: flex; flex-wrap: wrap; max-width: 1000px; width: 100%;
       background: #fff; border-radius: 20px; overflow: hidden;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2); animation: fadeIn 0.8s ease;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4); animation: fadeIn 0.8s ease;
+      position: relative; z-index: 10;
     }
     @keyframes fadeIn { from { opacity: 0; transform: scale(0.96);} to { opacity: 1; transform: scale(1);} }
     .left-panel, .right-panel { flex: 1 1 400px; padding: 50px; transition: all 0.3s ease-in-out; }
-    .left-panel h2 { margin-bottom: 30px; color: #1e3c72; font-size: 30px; }
+    .left-panel h2 { margin-bottom: 30px; color: #0f172a; font-size: 30px; }
     .form-group { margin-bottom: 20px; }
     label { display: block; margin-bottom: 5px; font-weight: 600; color: #333; }
     input, select {
       width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc;
       background: #f8f8f8; transition: all 0.2s ease; font-size: 15px;
     }
-    input:focus { border-color: #2a5298; background: #fff; outline: none; }
+    input:focus { border-color: #3b82f6; background: #fff; outline: none; }
     button {
-      width: 100%; padding: 14px; background: #1e3c72; border: none;
+      width: 100%; padding: 14px; background: #3b82f6; border: none;
       color: #fff; font-size: 16px; font-weight: bold; border-radius: 10px;
-      cursor: pointer; transition: background 0.3s ease;
+      cursor: pointer; transition: all 0.3s ease;
     }
-    button:hover { background: #16325c; }
+    button:hover { background: #2563eb; transform: translateY(-1px); }
     .right-panel {
-      background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff;
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); color: #fff;
       display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
     }
     .right-panel h1 { margin-bottom: 12px; font-size: 32px; font-weight: bold; }
     .right-panel p { font-size: 16px; margin-bottom: 28px; }
     .role-buttons { display: flex; flex-direction: column; gap: 14px; width: 80%; max-width: 250px; }
     .role-buttons button {
-      padding: 14px; background: #fff; color: #1e3c72; border: none; font-weight: bold; font-size: 15px;
+      padding: 14px; background: #fff; color: #0f172a; border: none; font-weight: bold; font-size: 15px;
       border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    .role-buttons button:hover { background: #e3ebff; transform: translateY(-2px); }
+    .role-buttons button:hover { background: #f1f5f9; transform: translateY(-2px); color: #3b82f6; }
     @media (max-width: 768px) { .container { flex-direction: column; } .right-panel, .left-panel { padding: 35px 25px; } }
      body {
       margin: 0;
       font-family: Arial, sans-serif;
     }
      :root {
-    --kmit-primary: #2c3e50;
+    --kmit-primary: #0f172a;
     --kmit-secondary: #3498db;
-    --kmit-accent: #e74c3c;
+    --kmit-accent: #3b82f6;
     --kmit-light: #ecf0f1;
-    --kmit-dark: #2c3e50;
+    --kmit-dark: #0f172a;
   }
   
   body {
@@ -64,51 +77,87 @@
     margin: 0;
   }
 
-  /* Navbar Styling - Matching your other files */
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    background-color: var(--kmit-primary);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Custom Header Navbar Styles */
+  .custom-navbar {
+    background-color: rgba(44, 62, 80, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 9999;
+    padding: 15px 0;
+    font-family: "Poppins", sans-serif;
     box-sizing: border-box;
   }
-
-  .navbar .logo {
-    color: white;
-    font-size: 22px;
-      padding-left:230px;
-    font-weight: 700;
-    text-decoration: none;
+  .custom-navbar .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  .custom-navbar .logo-link {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 500;
   }
-
-  .navbar ul {
+  .custom-navbar .logo-icon {
+    font-size: 20px;
+    color: #ffffff;
+  }
+  .custom-navbar .logo-bold {
+    font-weight: 700;
+  }
+  .custom-navbar .nav-links {
     display: flex;
     list-style: none;
-    gap: 20px;
+    gap: 5px;
     margin: 0;
     padding: 0;
-     padding-right:238px;
+    align-items: center;
   }
-
-  .navbar ul li a {
-   color: gainsboro;
+  .custom-navbar .nav-link-item {
+    color: #e2e8f0;
     text-decoration: none;
     font-size: 16px;
-    transition: 0.3s;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    display: inline-block;
   }
-
-  .navbar ul li a:hover {
-    color: var(--kmit-accent);
+  .custom-navbar .nav-link-item:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .custom-navbar .nav-link-item.active {
+    background-color: #3b82f6;
+    color: #ffffff !important;
+    font-weight: 600;
+  }
+  @media (max-width: 768px) {
+    .custom-navbar .nav-container {
+      flex-direction: column;
+      gap: 15px;
+    }
+    .custom-navbar .nav-links {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .custom-navbar .nav-link-item {
+      font-size: 14px;
+      padding: 6px 12px;
+    }
   }
     /* Dummy content for testing */
     .content {
@@ -129,22 +178,30 @@
     </ul>
   </div>
 </nav> -->
-  <nav class="navbar">
-    <a href="#" class="logo">KMIT Clubs Hub</a>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="register.html">Register</a></li>
-      <li><a href="login.html">Login</a></li>
-      <li><a href="clubs.html">Clubs</a></li>
-      <li><a href="event.html">Events</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
+  <nav class="custom-navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo-link">
+        <i class="fas fa-users logo-icon"></i>
+        <span>KMIT <span class="logo-bold">Clubs Hub</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link-item">Home</a></li>
+        <li><a href="register.html" class="nav-link-item">Register</a></li>
+        <li><a href="login.html" class="nav-link-item active">Login</a></li>
+        <li><a href="clubs.html" class="nav-link-item">Clubs</a></li>
+        <li><a href="event.html" class="nav-link-item">Events</a></li>
+        <li><a href="about.html" class="nav-link-item">About</a></li>
+      </ul>
+    </div>
   </nav>
 
 
   </style>
 </head>
 <body>
+  <!-- Glowing Background Spots -->
+  <div style="position: absolute; right: -10rem; top: -10rem; width: 24rem; height: 24rem; background-color: rgba(59, 130, 246, 0.1); border-radius: 9999px; filter: blur(64px); pointer-events: none; z-index: 0;"></div>
+  <div style="position: absolute; left: -10rem; bottom: -10rem; width: 24rem; height: 24rem; background-color: rgba(99, 102, 241, 0.1); border-radius: 9999px; filter: blur(64px); pointer-events: none; z-index: 0;"></div>
     
   
   <div class="container">
@@ -171,6 +228,9 @@
 
  
 <script>
+  const API_BASE = (window.location.protocol === 'file:')
+    ? 'http://localhost:5000'
+    : window.location.origin;
   let currentRole = '';
 
   function showForm(role) {
@@ -188,37 +248,49 @@
       formContent.innerHTML = `
         <div class="form-group">
           <label for="rollNo">Roll Number</label>
-          <input type="text" id="rollNo" required />
+          <input type="text" id="rollNo" oninput="validateRollNoInput(this)" required />
+          <span class="error-message" id="rollNoError"></span>
         </div>
         <div class="form-group">
           <label for="studentPassword">Password</label>
-          <input type="password" id="studentPassword" required />
+          <input type="password" id="studentPassword" oninput="validateStudentPasswordInput(this)" required />
+          <span class="error-message" id="studentPasswordError"></span>
         </div>
         <button type="button" onclick="studentLogin()">Login</button>
+        <p style="margin-top: 12px; text-align: right;">
+          <a href="#" onclick="openForgotModal('Student')" style="color:#1e3c72; font-size:14px; text-decoration:none; font-weight:500;">Forgot Password?</a>
+        </p>
         ${registerLink}
       `;
     } else if (role === "Faculty") {
       formContent.innerHTML = `
         <div class="form-group">
           <label for="facultyemail">Faculty email</label>
-          <input type="text" id="facultyId" required />
+          <input type="text" id="facultyId" oninput="validateFacultyEmailInput(this)" required />
+          <span class="error-message" id="facultyIdError"></span>
         </div>
         <div class="form-group">
           <label for="facultyPassword">Password</label>
-          <input type="password" id="facultyPassword" required />
+          <input type="password" id="facultyPassword" oninput="validateFacultyPasswordInput(this)" required />
+          <span class="error-message" id="facultyPasswordError"></span>
         </div>
         <button type="button" onclick="facultyLogin()">Login</button>
+        <p style="margin-top: 12px; text-align: right;">
+          <a href="#" onclick="openForgotModal('Faculty')" style="color:#1e3c72; font-size:14px; text-decoration:none; font-weight:500;">Forgot Password?</a>
+        </p>
         ${registerLink}
       `;
     } else if (role === "Admin") {
       formContent.innerHTML = `
         <div class="form-group">
           <label for="adminId">Admin ID</label>
-          <input type="text" id="adminId" required />
+          <input type="text" id="adminId" oninput="validateAdminIdInput(this)" required />
+          <span class="error-message" id="adminIdError"></span>
         </div>
         <div class="form-group">
           <label for="adminPassword">Password</label>
-          <input type="password" id="adminPassword" required />
+          <input type="password" id="adminPassword" oninput="validateAdminPasswordInput(this)" required />
+          <span class="error-message" id="adminPasswordError"></span>
         </div>
         <button type="button" onclick="adminLogin()">Login</button>
         ${registerLink}
@@ -227,24 +299,130 @@
       formContent.innerHTML = `
         <div class="form-group">
           <label for="clubheadId">Club Head ID</label>
-          <input type="text" id="clubheadId" required />
+          <input type="text" id="clubheadId" oninput="validateClubHeadIdInput(this)" required />
+          <span class="error-message" id="clubheadIdError"></span>
         </div>
         <div class="form-group">
           <label for="clubheadPassword">Password</label>
-          <input type="password" id="clubheadPassword" required />
+          <input type="password" id="clubheadPassword" oninput="validateClubHeadPasswordInput(this)" required />
+          <span class="error-message" id="clubheadPasswordError"></span>
         </div>
         <button type="button" onclick="clubheadLogin()">Login</button>
+        <p style="margin-top: 12px; text-align: right;">
+          <a href="#" onclick="openForgotModal('ClubHead')" style="color:#1e3c72; font-size:14px; text-decoration:none; font-weight:500;">Forgot Password?</a>
+        </p>
         ${registerLink}
       `;
     }
   }
 
+  // Inline Validation Helpers for Login Page
+  function validateRollNoInput(input) {
+    const errorSpan = document.getElementById('rollNoError');
+    const pattern = /^(22|23|24|25)BD1A05[A-G][0-9]$/;
+    if (!pattern.test(input.value.trim())) {
+      errorSpan.textContent = 'Invalid Roll No format. Use: 23BD1A05C7';
+      return false;
+    } else {
+      errorSpan.textContent = '';
+      return true;
+    }
+  }
+
+  function validateStudentPasswordInput(input) {
+    const errorSpan = document.getElementById('studentPasswordError');
+    if (input.value.trim() === '') {
+      errorSpan.textContent = 'Password is required';
+      return false;
+    }
+    errorSpan.textContent = '';
+    return true;
+  }
+
+  function validateFacultyEmailInput(input) {
+    const errorSpan = document.getElementById('facultyIdError');
+    const pattern = /^[A-Za-z]{5,15}[0-9]{0,3}@gmail\.com$/;
+    if (!pattern.test(input.value.trim())) {
+      errorSpan.textContent = 'Format: 5-15 letters + optional digits + @gmail.com';
+      return false;
+    } else {
+      errorSpan.textContent = '';
+      return true;
+    }
+  }
+
+  function validateFacultyPasswordInput(input) {
+    const errorSpan = document.getElementById('facultyPasswordError');
+    if (input.value.trim() === '') {
+      errorSpan.textContent = 'Password is required';
+      return false;
+    }
+    errorSpan.textContent = '';
+    return true;
+  }
+
+  function validateAdminIdInput(input) {
+    const errorSpan = document.getElementById('adminIdError');
+    const pattern = /^[a-zA-Z0-9]{4,20}$/;
+    if (!pattern.test(input.value.trim())) {
+      errorSpan.textContent = 'Admin ID must be 4-20 alphanumeric characters';
+      return false;
+    } else {
+      errorSpan.textContent = '';
+      return true;
+    }
+  }
+
+  function validateAdminPasswordInput(input) {
+    const errorSpan = document.getElementById('adminPasswordError');
+    if (input.value.trim() === '') {
+      errorSpan.textContent = 'Password is required';
+      return false;
+    }
+    errorSpan.textContent = '';
+    return true;
+  }
+
+  function validateClubHeadIdInput(input) {
+    const errorSpan = document.getElementById('clubheadIdError');
+    const pattern = /^[A-Za-z0-9\s-]+-Head$/i;
+    if (!pattern.test(input.value.trim())) {
+      errorSpan.textContent = 'Invalid format. Use: Clubname-Head';
+      return false;
+    } else {
+      errorSpan.textContent = '';
+      return true;
+    }
+  }
+
+  function validateClubHeadPasswordInput(input) {
+    const errorSpan = document.getElementById('clubheadPasswordError');
+    if (input.value.trim() === '') {
+      errorSpan.textContent = 'Password is required';
+      return false;
+    }
+    errorSpan.textContent = '';
+    return true;
+  }
+
   // Fixed login functions
 function studentLogin() {
-  const username = document.getElementById("rollNo").value;
-  const password = document.getElementById("studentPassword").value;
+  const rollNoEl = document.getElementById("rollNo");
+  const passwordEl = document.getElementById("studentPassword");
+  
+  rollNoEl.value = rollNoEl.value.trim();
+  
+  const isRollNoValid = validateRollNoInput(rollNoEl);
+  const isPassValid = validateStudentPasswordInput(passwordEl);
+  
+  if (!isRollNoValid || !isPassValid) {
+    return;
+  }
 
-  fetch("https://clubs-hubs-projectazeema.onrender.com/login", {
+  const username = rollNoEl.value;
+  const password = passwordEl.value;
+
+  fetch(API_BASE + "/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ role: "student", username, password })
@@ -273,15 +451,23 @@ function studentLogin() {
   .catch(err => { console.error(err); alert("Login failed."); });
 }
 
-
-
-
-
 function facultyLogin() {
- const username = document.getElementById("facultyId").value;
-  const password = document.getElementById("facultyPassword").value;
+  const facultyIdEl = document.getElementById("facultyId");
+  const passwordEl = document.getElementById("facultyPassword");
+  
+  facultyIdEl.value = facultyIdEl.value.trim();
+  
+  const isEmailValid = validateFacultyEmailInput(facultyIdEl);
+  const isPassValid = validateFacultyPasswordInput(passwordEl);
+  
+  if (!isEmailValid || !isPassValid) {
+    return;
+  }
 
-  fetch("https://clubs-hubs-projectazeema.onrender.com/login", {
+  const username = facultyIdEl.value;
+  const password = passwordEl.value;
+
+  fetch(API_BASE + "/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ role: "faculty", username, password })
@@ -312,10 +498,36 @@ function facultyLogin() {
 }
 
 function adminLogin() {
-  const username = document.getElementById("adminId").value;
-  const password = document.getElementById("adminPassword").value;
+  const adminIdEl = document.getElementById("adminId");
+  const passwordEl = document.getElementById("adminPassword");
+  
+  adminIdEl.value = adminIdEl.value.trim();
+  
+  // Note: Standard Admin login "admin" bypasses the 4-20 regex format, 
+  // so we should explicitly allow "admin" (which is used for developer testing)
+  let isAdminIdValid = true;
+  if (adminIdEl.value !== "admin") {
+    isAdminIdValid = validateAdminIdInput(adminIdEl);
+  } else {
+    document.getElementById('adminIdError').textContent = '';
+  }
+  
+  // Fixed credentials bypass standard validation to allow local dev flow
+  let isPassValid = true;
+  if (passwordEl.value !== "admin123$") {
+    isPassValid = validateAdminPasswordInput(passwordEl);
+  } else {
+    document.getElementById('adminPasswordError').textContent = '';
+  }
+  
+  if (!isAdminIdValid || !isPassValid) {
+    return;
+  }
 
-  fetch("https://clubs-hubs-projectazeema.onrender.com/login", {
+  const username = adminIdEl.value;
+  const password = passwordEl.value;
+
+  fetch(API_BASE + "/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ role: "admin", username, password })
@@ -345,10 +557,22 @@ function adminLogin() {
 }
 
 function clubheadLogin() {
-  const username = document.getElementById("clubheadId").value;
-  const password = document.getElementById("clubheadPassword").value;
+  const clubheadIdEl = document.getElementById("clubheadId");
+  const passwordEl = document.getElementById("clubheadPassword");
+  
+  clubheadIdEl.value = clubheadIdEl.value.trim();
+  
+  const isIdValid = validateClubHeadIdInput(clubheadIdEl);
+  const isPassValid = validateClubHeadPasswordInput(passwordEl);
+  
+  if (!isIdValid || !isPassValid) {
+    return;
+  }
 
-  fetch("https://clubs-hubs-projectazeema.onrender.com/login", {
+  const username = clubheadIdEl.value;
+  const password = passwordEl.value;
+
+  fetch(API_BASE + "/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ role: "clubhead", username, password })
@@ -377,7 +601,232 @@ function clubheadLogin() {
   .catch(err => { console.error(err); alert("Login failed."); });
 }
 
+  let forgotPasswordRole = '';
+  let facultyEmailForOtp = '';
 
+  function openForgotModal(role) {
+    forgotPasswordRole = role;
+    const modal = document.getElementById("forgotPasswordModal");
+    const title = document.getElementById("forgotModalTitle");
+    const body = document.getElementById("forgotModalBody");
+    const msg = document.getElementById("forgotModalMessage");
+    
+    msg.style.display = 'none';
+    modal.style.display = 'flex';
+    
+    if (role === 'Student') {
+      title.innerText = "Request Password Reset";
+      body.innerHTML = `
+        <p style="font-size: 13px; color: #475569; line-height: 1.5; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
+          <i class="fas fa-info-circle" style="color: #3b82f6; margin-right: 5px;"></i>
+          Submit a request to the Admin. You can also visit the Admin Office or email <strong>admin@kmit.in</strong>.
+        </p>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="display:block; margin-bottom:5px; font-weight:600; color:#333;">Student Roll Number</label>
+          <input type="text" id="forgotUsername" placeholder="e.g. 23BD1A05A4" required />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="display:block; margin-bottom:5px; font-weight:600; color:#333;">Contact Email</label>
+          <input type="email" id="forgotContactEmail" placeholder="e.g. student@gmail.com" required />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="display:block; margin-bottom:5px; font-weight:600; color:#333;">Reason / Details (Optional)</label>
+          <input type="text" id="forgotReason" placeholder="Reason for reset" />
+        </div>
+        <button type="button" onclick="submitResetRequest()" style="margin-top: 10px; padding: 12px; background: #3b82f6; color: #fff; font-weight: bold; border-radius: 8px; cursor: pointer; border: none;">Submit Request</button>
+      `;
+    } else if (role === 'Faculty') {
+      title.innerText = "Faculty Reset (OTP)";
+      body.innerHTML = `
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="display:block; margin-bottom:5px; font-weight:600; color:#333;">Faculty Email</label>
+          <input type="text" id="forgotUsername" placeholder="e.g. name@gmail.com" required />
+        </div>
+        <button type="button" onclick="requestOtp()" style="margin-top: 10px; padding: 12px; background: #1e3c72; color: #fff; font-weight: bold; border-radius: 8px; cursor: pointer; border: none;">Send OTP Code</button>
+      `;
+    } else if (role === 'ClubHead') {
+      title.innerText = "Request Password Reset";
+      body.innerHTML = `
+        <p style="font-size: 13px; color: #475569; line-height: 1.5; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
+          <i class="fas fa-info-circle" style="color: #3b82f6; margin-right: 5px;"></i>
+          Submit a request to the Admin. You can also visit the Admin Office or email <strong>admin@kmit.in</strong>.
+        </p>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="display:block; margin-bottom:5px; font-weight:600; color:#333;">Club Head Username</label>
+          <input type="text" id="forgotUsername" placeholder="e.g. Mudra-Head" required />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="display:block; margin-bottom:5px; font-weight:600; color:#333;">Contact Email</label>
+          <input type="email" id="forgotContactEmail" placeholder="e.g. head@gmail.com" required />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="display:block; margin-bottom:5px; font-weight:600; color:#333;">Reason / Details (Optional)</label>
+          <input type="text" id="forgotReason" placeholder="Reason for reset" />
+        </div>
+        <button type="button" onclick="submitResetRequest()" style="margin-top: 10px; padding: 12px; background: #3b82f6; color: #fff; font-weight: bold; border-radius: 8px; cursor: pointer; border: none;">Submit Request</button>
+      `;
+    }
+  }
+
+  function closeForgotModal() {
+    document.getElementById("forgotPasswordModal").style.display = 'none';
+  }
+
+  function showModalMsg(text, isError = false) {
+    const msg = document.getElementById("forgotModalMessage");
+    msg.innerText = text;
+    msg.style.display = 'block';
+    if (isError) {
+      msg.style.backgroundColor = '#f1f5f9';
+      msg.style.color = '#475569';
+      msg.style.border = '1px solid #cbd5e1';
+    } else {
+      msg.style.backgroundColor = '#dcfce7';
+      msg.style.color = '#15803d';
+      msg.style.border = '1px solid #86efac';
+    }
+  }
+
+  async function requestOtp() {
+    const email = document.getElementById("forgotUsername").value.trim();
+    if (!email) {
+      showModalMsg("❌ Email is required.", true);
+      return;
+    }
+    
+    try {
+      const res = await fetch(API_BASE + "/forgot-password/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: "faculty", username: email })
+      }).then(r => r.json());
+      
+      if (res.error) {
+        showModalMsg(res.error, true);
+        return;
+      }
+      
+      facultyEmailForOtp = email;
+      showModalMsg(res.message);
+      
+      if (res.otpSimulated) {
+        alert(`[SIMULATED EMAIL SENT]\nTo: ${email}\nOTP: ${res.otpSimulated}\n\nThis OTP is also logged in the server's command terminal!`);
+      }
+      
+      const body = document.getElementById("forgotModalBody");
+      body.innerHTML = `
+        <p style="font-size: 14px; color: #555; margin-bottom: 5px;">An OTP code has been logged to the server terminal. Please input it below along with your new password.</p>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="display:block; margin-bottom:5px; font-weight:600; color:#333;">6-Digit OTP Code</label>
+          <input type="text" id="forgotOtp" placeholder="e.g. 123456" required />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="display:block; margin-bottom:5px; font-weight:600; color:#333;">New Password</label>
+          <input type="password" id="forgotNewPassword" placeholder="Minimum 10 chars, uppercase, digit, special symbol" required />
+        </div>
+        <button type="button" onclick="submitReset()" style="margin-top: 10px; padding: 12px; background: #1e3c72; color: #fff; font-weight: bold; border-radius: 8px; cursor: pointer; border: none;">Reset Password</button>
+      `;
+    } catch (err) {
+      console.error(err);
+      showModalMsg("❌ Connection failed.", true);
+    }
+  }
+
+  async function submitResetRequest() {
+    const username = document.getElementById("forgotUsername").value.trim();
+    const contactEmail = document.getElementById("forgotContactEmail").value.trim();
+    const reason = document.getElementById("forgotReason").value.trim();
+    
+    if (!username || !contactEmail) {
+      showModalMsg("❌ Username/Roll Number and Contact Email are required.", true);
+      return;
+    }
+    
+    try {
+      const res = await fetch(API_BASE + "/forgot-password/request-reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          role: forgotPasswordRole.toLowerCase(),
+          username,
+          contactEmail,
+          reason
+        })
+      }).then(r => r.json());
+      
+      if (res.error) {
+        showModalMsg(res.error, true);
+        return;
+      }
+      
+      showModalMsg(res.message || "✅ Password reset request submitted!");
+      setTimeout(() => {
+        closeForgotModal();
+      }, 2500);
+    } catch (err) {
+      console.error(err);
+      showModalMsg("❌ Connection failed.", true);
+    }
+  }
+
+  async function submitReset() {
+    const payload = { role: forgotPasswordRole.toLowerCase() };
+    
+    if (forgotPasswordRole === 'Faculty') {
+      payload.username = facultyEmailForOtp;
+      payload.otp = document.getElementById("forgotOtp").value.trim();
+      payload.newPassword = document.getElementById("forgotNewPassword").value;
+      if (!payload.otp || !payload.newPassword) {
+        showModalMsg("❌ All fields are required.", true);
+        return;
+      }
+    } else {
+      showModalMsg("❌ Reset only available for Faculty.", true);
+      return;
+    }
+    
+    try {
+      const res = await fetch(API_BASE + "/forgot-password/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(r => r.json());
+      
+      if (res.error) {
+        showModalMsg(res.error, true);
+        return;
+      }
+      
+      showModalMsg(res.message || "✅ Password reset successful!");
+      setTimeout(() => {
+        closeForgotModal();
+      }, 2500);
+    } catch (err) {
+      console.error(err);
+      showModalMsg("❌ Connection failed.", true);
+    }
+  }
 </script>
+
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1100; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background: white; border-radius: 16px; width: 100%; max-width: 450px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; animation: slideUp 0.3s ease-out; box-sizing: border-box; text-align: left;">
+    <button onclick="closeForgotModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; color: #888; cursor: pointer; width: 30px; height: 30px; padding: 0; display: flex; align-items: center; justify-content: center;">&times;</button>
+    <h3 style="color: #1e3c72; margin-bottom: 20px; font-size: 22px; font-weight: bold;" id="forgotModalTitle">Reset Password</h3>
+    
+    <div id="forgotModalBody" style="display: flex; flex-direction: column; gap: 16px;">
+      <!-- Dynamic inputs based on role -->
+    </div>
+    
+    <div id="forgotModalMessage" style="margin-top: 15px; font-size: 14px; display: none; padding: 10px; border-radius: 8px;"></div>
+  </div>
+</div>
+
+<style>
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+</style>
 </body>
 </html>

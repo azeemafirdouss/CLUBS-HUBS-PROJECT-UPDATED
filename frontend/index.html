@@ -17,19 +17,87 @@
       color: #333;
       scroll-behavior: smooth;
     }
-    nav {
-      background-color: #333;
-      color: white;
-      padding: 15px 30px;
+    /* Custom Header Navbar Styles */
+    .custom-navbar {
+      background-color: rgba(44, 62, 80, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      padding: 15px 0;
+      font-family: "Poppins", sans-serif;
+      box-sizing: border-box;
+    }
+    .custom-navbar .nav-container {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      box-sizing: border-box;
     }
-    nav a {
-      color: white;
-      margin-left: 20px;
+    .custom-navbar .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       text-decoration: none;
+      color: #ffffff;
+      font-size: 22px;
       font-weight: 500;
+    }
+    .custom-navbar .logo-icon {
+      font-size: 20px;
+      color: #ffffff;
+    }
+    .custom-navbar .logo-bold {
+      font-weight: 700;
+    }
+    .custom-navbar .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 5px;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+    }
+    .custom-navbar .nav-link-item {
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    .custom-navbar .nav-link-item:hover {
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .custom-navbar .nav-link-item.active {
+      background-color: #3b82f6;
+      color: #ffffff !important;
+      font-weight: 600;
+    }
+    @media (max-width: 768px) {
+      .custom-navbar .nav-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+      .custom-navbar .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+      .custom-navbar .nav-link-item {
+        font-size: 14px;
+        padding: 6px 12px;
+      }
     }
     .hero {
       position: relative;
@@ -334,15 +402,20 @@
 </head>
 <body>
   <!-- Navbar -->
-  <nav>
-    <div class="logo">Clubs Hub</div>
-    <div>
-      <a href="index.html">Home</a>
-      <a href="register.html">Register</a>
-      <a href="login.html">Login</a>
-      <a href="clubs.html">Clubs</a>
-      <a href="event.html">Events</a>
-      <a href="about.html">About</a>
+  <nav class="custom-navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo-link">
+        <i class="fas fa-users logo-icon"></i>
+        <span>KMIT <span class="logo-bold">Clubs Hub</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link-item active">Home</a></li>
+        <li><a href="register.html" class="nav-link-item">Register</a></li>
+        <li><a href="login.html" class="nav-link-item">Login</a></li>
+        <li><a href="clubs.html" class="nav-link-item">Clubs</a></li>
+        <li><a href="event.html" class="nav-link-item">Events</a></li>
+        <li><a href="about.html" class="nav-link-item">About</a></li>
+      </ul>
     </div>
   </nav>
   <!-- Hero Section -->

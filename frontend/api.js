@@ -1,5 +1,7 @@
 // api.js
-const API_BASE = "https://clubs-hubs-projectazeema.onrender.com";
+const API_BASE = (window.location.protocol === 'file:')
+  ? 'http://localhost:5000'
+  : window.location.origin;
 
 function getToken() {
   return localStorage.getItem("token");

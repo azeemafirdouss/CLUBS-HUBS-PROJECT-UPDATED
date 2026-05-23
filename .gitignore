@@ -1,2 +1,14 @@
-node_modules
+# Dependecies
+node_modules/
+backend/node_modules/
+
+# Environment variables (Secrets)
 .env
+.env.*
+backend/.env
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+*.code-workspace

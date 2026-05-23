@@ -19,18 +19,90 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
             color: #333;
+            padding-top: 70px !important;
         }
         
-        .navbar {
-            background-color: var(--kmit-primary);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        /* Custom Header Navbar Styles */
+        .custom-navbar {
+            background-color: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            padding: 15px 0;
+            font-family: "Poppins", sans-serif;
+            box-sizing: border-box;
         }
-        
-        .navbar-brand {
-            font-weight: 700;
+        .custom-navbar .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .custom-navbar .logo-link {
             display: flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 500;
+        }
+        .custom-navbar .logo-icon {
+            font-size: 20px;
+            color: #ffffff;
+        }
+        .custom-navbar .logo-bold {
+            font-weight: 700;
+        }
+        .custom-navbar .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+        .custom-navbar .nav-link-item {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .custom-navbar .nav-link-item:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .custom-navbar .nav-link-item.active {
+            background-color: #3b82f6;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .custom-navbar .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .custom-navbar .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            .custom-navbar .nav-link-item {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
         }
         
         .hero-section {
@@ -267,41 +339,20 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-users"></i>
-                KMIT Clubs Hub
+    <nav class="custom-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo-link">
+                <i class="fas fa-users logo-icon"></i>
+                <span>KMIT <span class="logo-bold">Clubs Hub</span></span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.html">regsiter</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.html">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="clubs.html">Clubs</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="event.html">Events</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                   
-                </ul>
-            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link-item">Home</a></li>
+                <li><a href="register.html" class="nav-link-item">Register</a></li>
+                <li><a href="login.html" class="nav-link-item">Login</a></li>
+                <li><a href="clubs.html" class="nav-link-item active">Clubs</a></li>
+                <li><a href="event.html" class="nav-link-item">Events</a></li>
+                <li><a href="about.html" class="nav-link-item">About</a></li>
+            </ul>
         </div>
     </nav>
 

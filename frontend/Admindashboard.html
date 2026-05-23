@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KMIT Clubs Hub - Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { 'sans': ['Inter', 'sans-serif'] },
+          fontFamily: { 'sans': ['Outfit', 'Inter', 'sans-serif'] },
           colors: {
             primary: '#2c3e50',
             secondary: '#3498db',
@@ -24,64 +25,125 @@
     }
   </script>
   <style>
+    body {
+      font-family: 'Outfit', 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+    
+    .sidebar-gradient {
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    }
+    
+    .sidebar-link {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-left: 4px solid transparent;
+      color: #94a3b8;
+    }
+    
+    .sidebar-link:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+      color: #f8fafc;
+      transform: translateX(4px);
+    }
+    
     .sidebar-link.active {
-      background-color: #3498db;
-      color: white;
+      background-color: rgba(59, 130, 246, 0.15) !important;
+      border-left: 4px solid #3b82f6 !important;
+      color: #3b82f6 !important;
+      font-weight: 600;
     }
+    
     .stat-card {
-      transition: transform 0.2s ease;
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
     }
+    
     .stat-card:hover {
       transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
     }
   </style>
 </head>
 
-<body class="font-sans bg-gray-50 min-h-screen">
+<body class="font-sans bg-gray-50">
 
-  <!-- Navigation Header -->
-  <nav class="bg-primary text-white shadow-lg">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <i class="fas fa-users text-secondary text-xl"></i>
-        <h1 class="text-xl font-bold">KMIT Clubs Hub - Admin Dashboard</h1>
+  <div class="flex h-screen w-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 sidebar-gradient text-slate-300 flex flex-col shadow-xl border-r border-slate-800 shrink-0">
+    <!-- Branding Header -->
+    <div class="p-6 text-2xl font-bold border-b border-white/10 flex items-center">
+      <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-2.5 mr-3 shadow-lg shadow-blue-500/20 flex items-center justify-center">
+        <i class="fas fa-user-shield text-white text-sm"></i>
       </div>
-      <div class="flex items-center space-x-4">
-        <span id="adminName" class="font-medium">Admin</span>
-        <button onclick="logout()" class="bg-accent hover:bg-red-600 px-4 py-2 rounded text-white font-medium transition-colors">
-          <i class="fas fa-sign-out-alt mr-2"></i>Logout
-        </button>
+      <span class="text-lg font-black tracking-tight bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Admin Panel</span>
+    </div>
+    
+    <!-- Sidebar Navigation -->
+    <nav class="flex-1 p-4 space-y-1.5 mt-4 overflow-y-auto">
+      <button onclick="showSection('dashboard', this)" class="sidebar-link w-full flex items-center p-3 rounded-xl active text-left">
+        <i class="fas fa-tachometer-alt w-5 h-5 mr-3 flex items-center justify-center"></i>
+        <span class="font-medium text-sm">Dashboard Overview</span>
+      </button>
+      <button onclick="showSection('events', this)" class="sidebar-link w-full flex items-center p-3 rounded-xl text-left">
+        <i class="fas fa-calendar-check w-5 h-5 mr-3 flex items-center justify-center"></i>
+        <span class="font-medium text-sm">Event Management</span>
+      </button>
+      <button onclick="showSection('users', this)" class="sidebar-link w-full flex items-center p-3 rounded-xl text-left">
+        <i class="fas fa-users-cog w-5 h-5 mr-3 flex items-center justify-center"></i>
+        <span class="font-medium text-sm">User Management</span>
+      </button>
+      <button onclick="showSection('clubs', this)" class="sidebar-link w-full flex items-center p-3 rounded-xl text-left">
+        <i class="fas fa-chess-queen w-5 h-5 mr-3 flex items-center justify-center"></i>
+        <span class="font-medium text-sm">Club Management</span>
+      </button>
+      <button onclick="showSection('funds', this)" class="sidebar-link w-full flex items-center p-3 rounded-xl text-left">
+        <i class="fas fa-money-bill-wave w-5 h-5 mr-3 flex items-center justify-center"></i>
+        <span class="font-medium text-sm">Fund Management</span>
+      </button>
+      <button onclick="showSection('reports', this)" class="sidebar-link w-full flex items-center p-3 rounded-xl text-left">
+        <i class="fas fa-chart-bar w-5 h-5 mr-3 flex items-center justify-center"></i>
+        <span class="font-medium text-sm">Reports & Analytics</span>
+      </button>
+      <button onclick="showSection('reset-requests', this)" class="sidebar-link w-full flex items-center p-3 rounded-xl text-left">
+        <i class="fas fa-key w-5 h-5 mr-3 flex items-center justify-center"></i>
+        <span class="font-medium text-sm">Reset Requests</span>
+      </button>
+      <button onclick="showSection('payments-ledger', this)" class="sidebar-link w-full flex items-center p-3 rounded-xl text-left">
+        <i class="fas fa-receipt w-5 h-5 mr-3 flex items-center justify-center"></i>
+        <span class="font-medium text-sm">Payments Ledger</span>
+      </button>
+    </nav>
+    
+    <!-- Sidebar Footer with User Profile and Logout -->
+    <div class="p-4 border-t border-white/10 mt-auto bg-slate-950/20 shrink-0">
+      <div class="flex items-center gap-3 mb-4 px-2">
+        <div class="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-xs">
+          A
+        </div>
+        <div class="flex flex-col">
+          <span id="adminName" class="text-xs font-semibold text-slate-200">Admin</span>
+          <span class="text-[10px] text-slate-500">Super Administrator</span>
+        </div>
+      </div>
+      <button onclick="logout()" class="w-full bg-white/5 hover:bg-red-500/20 border border-white/10 hover:border-red-500/30 text-white p-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-300 shadow-md">
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="text-sm">Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Container (scrolls independently) -->
+  <main class="flex-1 p-8 overflow-y-auto">
+    <!-- Top Header Banner -->
+    <div class="flex justify-between items-center mb-8 pb-6 border-b border-gray-200">
+      <div>
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">KMIT Clubs Hub - Administrator</h2>
+        <p class="text-slate-500 mt-1">System wide governance, approvals, and report compilations</p>
+      </div>
+      <div class="bg-blue-50 text-blue-800 px-4 py-3 rounded-xl font-medium shadow-sm border border-blue-100 flex items-center gap-2">
+        <i class="fas fa-calendar-alt"></i>
+        Today: <span id="today-date">--</span>
       </div>
     </div>
-  </nav>
-
-  <div class="flex">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md min-h-screen">
-      <nav class="mt-6">
-        <button onclick="showSection('dashboard')" class="sidebar-link w-full text-left py-3 px-6 hover:bg-secondary hover:text-white block transition-colors active">
-          <i class="fas fa-tachometer-alt mr-3"></i>Dashboard Overview
-        </button>
-        <button onclick="showSection('events')" class="sidebar-link w-full text-left py-3 px-6 hover:bg-secondary hover:text-white block transition-colors">
-          <i class="fas fa-calendar-check mr-3"></i>Event Management
-        </button>
-        <button onclick="showSection('users')" class="sidebar-link w-full text-left py-3 px-6 hover:bg-secondary hover:text-white block transition-colors">
-          <i class="fas fa-users-cog mr-3"></i>User Management
-        </button>
-        <button onclick="showSection('clubs')" class="sidebar-link w-full text-left py-3 px-6 hover:bg-secondary hover:text-white block transition-colors">
-          <i class="fas fa-chess-queen mr-3"></i>Club Management
-        </button>
-        <button onclick="showSection('funds')" class="sidebar-link w-full text-left py-3 px-6 hover:bg-secondary hover:text-white block transition-colors">
-          <i class="fas fa-money-bill-wave mr-3"></i>Fund Management
-        </button>
-        <button onclick="showSection('reports')" class="sidebar-link w-full text-left py-3 px-6 hover:bg-secondary hover:text-white block transition-colors">
-          <i class="fas fa-chart-bar mr-3"></i>Reports & Analytics
-        </button>
-      </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 p-8">
       <!-- DASHBOARD OVERVIEW -->
       <section id="dashboard" class="space-y-8">
         <h2 class="text-2xl font-bold text-primary mb-2">Dashboard Overview</h2>
@@ -180,15 +242,22 @@
             <h2 class="text-2xl font-bold text-primary mb-2">User Management</h2>
             <p class="text-gray-600">Manage all users in the system</p>
           </div>
-          <div class="flex space-x-3">
-            <select id="userFilter" onchange="filterUsers()" class="border rounded px-3 py-2">
+          <div class="flex space-x-2">
+            <select id="userFilter" onchange="filterUsers()" class="border rounded px-3 py-2 text-sm bg-white border-gray-300">
               <option value="all">All Users</option>
               <option value="student">Students</option>
               <option value="faculty">Faculty</option>
               <option value="clubhead">Club Heads</option>
             </select>
-            <button onclick="refreshUsers()" class="bg-secondary text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
-              <i class="fas fa-sync-alt mr-2"></i>Refresh
+            <button onclick="refreshUsers()" class="bg-secondary text-white px-3 py-2 rounded hover:bg-blue-600 transition-colors text-sm font-medium">
+              <i class="fas fa-sync-alt mr-1"></i>Refresh
+            </button>
+            <input type="file" id="userImportInput" accept=".csv" class="hidden" onchange="importUsersCSV(event)">
+            <button onclick="document.getElementById('userImportInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded transition-colors text-sm font-medium flex items-center">
+              <i class="fas fa-file-import mr-1"></i>Import CSV
+            </button>
+            <button onclick="exportUsersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded transition-colors text-sm font-medium flex items-center">
+              <i class="fas fa-file-export mr-1"></i>Export CSV
             </button>
           </div>
         </div>
@@ -223,9 +292,21 @@
             <h2 class="text-2xl font-bold text-primary mb-2">Club Management</h2>
             <p class="text-gray-600">Manage all clubs and their details</p>
           </div>
-          <button onclick="refreshClubs()" class="bg-secondary text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
-            <i class="fas fa-sync-alt mr-2"></i>Refresh
-          </button>
+          <div class="flex space-x-2">
+            <button onclick="openAddClubModal()" class="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 transition-colors text-sm font-medium flex items-center">
+              <i class="fas fa-plus mr-1"></i>Add Club
+            </button>
+            <button onclick="refreshClubs()" class="bg-secondary text-white px-3 py-2 rounded hover:bg-blue-600 transition-colors text-sm font-medium">
+              <i class="fas fa-sync-alt mr-1"></i>Refresh
+            </button>
+            <input type="file" id="clubImportInput" accept=".csv" class="hidden" onchange="importClubsCSV(event)">
+            <button onclick="document.getElementById('clubImportInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded transition-colors text-sm font-medium flex items-center">
+              <i class="fas fa-file-import mr-1"></i>Import CSV
+            </button>
+            <button onclick="exportClubsCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded transition-colors text-sm font-medium flex items-center">
+              <i class="fas fa-file-export mr-1"></i>Export CSV
+            </button>
+          </div>
         </div>
 
         <div class="bg-white shadow rounded-lg overflow-hidden">
@@ -294,34 +375,176 @@
             <p class="text-gray-600">Generate detailed reports and view system analytics</p>
           </div>
           <div class="flex space-x-3">
-            <button onclick="generateReport('pdf')" class="bg-accent text-white px-4 py-2 rounded hover:bg-red-600 transition-colors">
+            <button onclick="generateReport('pdf')" class="bg-accent hover:bg-red-600 text-white px-4 py-2 rounded font-medium shadow-md transition-all duration-300 transform hover:-translate-y-0.5">
               <i class="fas fa-file-pdf mr-2"></i>Export PDF
             </button>
-            <button onclick="generateReport('csv')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors">
+            <button onclick="generateReport('csv')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium shadow-md transition-all duration-300 transform hover:-translate-y-0.5">
               <i class="fas fa-file-csv mr-2"></i>Export CSV
             </button>
           </div>
         </div>
 
+        <!-- Analytical Charts Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="bg-white shadow rounded-lg p-6">
-            <h3 class="text-xl font-bold text-primary mb-4">Club Participation</h3>
-            <div id="clubParticipationChart" class="h-64 flex items-center justify-center">
-              <p class="text-gray-500">Chart will be displayed here</p>
+          <!-- Club Participation Card -->
+          <div class="bg-gradient-to-br from-slate-900 to-slate-950 text-white border border-slate-800 rounded-2xl shadow-xl p-6 transition-all duration-300 hover:shadow-blue-900/10">
+            <h3 class="text-lg font-bold text-slate-100 mb-4 border-b border-slate-800 pb-3 flex items-center gap-2">
+              <i class="fas fa-chart-bar text-blue-500"></i> Club Participation
+            </h3>
+            <div id="clubParticipationChart" class="h-72 w-full flex items-center justify-center overflow-y-auto scroll-custom">
+              <div class="flex flex-col items-center justify-center text-slate-500">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-2"></div>
+                <p>Loading participation statistics...</p>
+              </div>
             </div>
           </div>
-          <div class="bg-white shadow rounded-lg p-6">
-            <h3 class="text-xl font-bold text-primary mb-4">Event Status Distribution</h3>
-            <div id="eventStatusChart" class="h-64 flex items-center justify-center">
-              <p class="text-gray-500">Chart will be displayed here</p>
+
+          <!-- Event Status Distribution Card -->
+          <div class="bg-gradient-to-br from-slate-900 to-slate-950 text-white border border-slate-800 rounded-2xl shadow-xl p-6 transition-all duration-300 hover:shadow-indigo-900/10">
+            <h3 class="text-lg font-bold text-slate-100 mb-4 border-b border-slate-800 pb-3 flex items-center gap-2">
+              <i class="fas fa-chart-pie text-indigo-500"></i> Event Status Distribution
+            </h3>
+            <div id="eventStatusChart" class="h-72 w-full flex items-center justify-center">
+              <div class="flex flex-col items-center justify-center text-slate-500">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500 mb-2"></div>
+                <p>Loading distribution data...</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="bg-white shadow rounded-lg p-6">
-          <h3 class="text-xl font-bold text-primary mb-4">System Statistics</h3>
-          <div id="reportContainer" class="text-gray-700">
-            <p>Reports will be generated here...</p>
+        <!-- System Statistics Details Card -->
+        <div class="bg-gradient-to-br from-slate-900 to-slate-950 text-white border border-slate-800 rounded-2xl shadow-xl p-6">
+          <h3 class="text-lg font-bold text-slate-100 mb-4 border-b border-slate-800 pb-3 flex items-center gap-2">
+            <i class="fas fa-database text-purple-500"></i> System Statistics
+          </h3>
+          <div id="reportContainer" class="text-slate-300">
+            <div class="flex flex-col items-center justify-center py-8 text-slate-500">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mb-2"></div>
+              <p>Compiling statistics report...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASSWORD RESET REQUESTS -->
+      <section id="reset-requests" class="hidden space-y-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-2xl font-bold text-primary mb-2">Password Reset Requests</h2>
+            <p class="text-gray-600">Review and resolve password reset requests from Students and Club Heads</p>
+          </div>
+          <button onclick="loadResetRequests()" class="bg-secondary text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+            <i class="fas fa-sync-alt mr-2"></i>Refresh List
+          </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-gray-200">
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Username / Roll No</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Role</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Contact Email</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Reason / Note</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Submitted At</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody id="resetRequestsTable" class="divide-y divide-gray-100">
+                <tr>
+                  <td colspan="6" class="py-8 text-center text-gray-500">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                    <p>Loading reset requests...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAYMENTS LEDGER -->
+      <section id="payments-ledger" class="hidden space-y-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-2xl font-bold text-primary mb-2">Payments Ledger</h2>
+            <p class="text-gray-600">Monitor all student registrations, transaction histories, and club revenues</p>
+          </div>
+          <button onclick="loadPaymentsLedger()" class="bg-secondary text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+            <i class="fas fa-sync-alt mr-2"></i>Refresh Ledger
+          </button>
+        </div>
+
+        <!-- Revenue Metrics cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-md">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Revenue Collected</p>
+                <h3 class="text-2xl font-black text-slate-800 mt-2" id="ledgerTotalRevenue">₹0</h3>
+              </div>
+              <div class="bg-emerald-100 text-emerald-600 rounded-full p-3.5">
+                <i class="fas fa-indian-rupee-sign text-xl"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-md">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Paid Transactions</p>
+                <h3 class="text-2xl font-black text-slate-800 mt-2" id="ledgerTotalTxns">0</h3>
+              </div>
+              <div class="bg-indigo-100 text-indigo-600 rounded-full p-3.5">
+                <i class="fas fa-receipt text-xl"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-md">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Free Registrations</p>
+                <h3 class="text-2xl font-black text-slate-800 mt-2" id="ledgerTotalFree">0</h3>
+              </div>
+              <div class="bg-slate-100 text-slate-600 rounded-full p-3.5">
+                <i class="fas fa-ticket text-xl"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payments Ledger Table -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+          <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-slate-50/50">
+            <h4 class="font-bold text-slate-700 text-sm">All Registrations & Payments</h4>
+            <div class="relative max-w-xs w-full">
+              <input type="text" id="ledgerSearchInput" oninput="filterPaymentsLedger()" placeholder="Search student or club..." class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-xs outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all">
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400 text-[10px]"></i>
+            </div>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-gray-200">
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Student Roll / Name</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Event</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Club</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Payment Status</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Transaction Details</th>
+                  <th class="py-4 px-6 text-sm font-bold text-slate-700">Date & Time</th>
+                </tr>
+              </thead>
+              <tbody id="paymentsLedgerTable" class="divide-y divide-gray-100">
+                <tr>
+                  <td colspan="6" class="py-8 text-center text-gray-500">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                    <p>Loading payments ledger...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -350,7 +573,53 @@
     </div>
   </div>
 
+  <!-- Add Club Modal -->
+  <div id="addClubModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg w-[450px] shadow-xl max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-primary">Add New Club</h3>
+        <button onclick="closeAddClubModal()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times text-lg"></i>
+        </button>
+      </div>
+      <form id="addClubForm" class="space-y-4">
+        <div>
+          <label class="block text-gray-700 text-sm font-semibold mb-1" for="newClubName">Club Name</label>
+          <input type="text" id="newClubName" required class="w-full p-2 border rounded focus:ring-2 focus:ring-secondary focus:border-transparent outline-none" placeholder="e.g. Mudra">
+        </div>
+        <div>
+          <label class="block text-gray-700 text-sm font-semibold mb-1" for="newClubSlug">Slug (URL identifier)</label>
+          <input type="text" id="newClubSlug" required class="w-full p-2 border rounded focus:ring-2 focus:ring-secondary focus:border-transparent outline-none" placeholder="e.g. mudra">
+        </div>
+        <div>
+          <label class="block text-gray-700 text-sm font-semibold mb-1" for="newClubHeadUsername">Club Head Username</label>
+          <input type="text" id="newClubHeadUsername" required class="w-full p-2 border rounded focus:ring-2 focus:ring-secondary focus:border-transparent outline-none" placeholder="e.g. Mudra-Head">
+          <p class="text-xs text-gray-500 mt-1">Must end with "-Head" (e.g. Mudra-Head)</p>
+        </div>
+        <div>
+          <label class="block text-gray-700 text-sm font-semibold mb-1" for="newClubDescription">Description</label>
+          <textarea id="newClubDescription" required class="w-full p-2 border rounded focus:ring-2 focus:ring-secondary focus:border-transparent outline-none" rows="3" placeholder="Club purpose and activities..."></textarea>
+        </div>
+        <div>
+          <label class="block text-gray-700 text-sm font-semibold mb-1" for="newClubImage">Image Filename</label>
+          <input type="text" id="newClubImage" class="w-full p-2 border rounded focus:ring-2 focus:ring-secondary focus:border-transparent outline-none" placeholder="e.g. mudra.png (optional)">
+        </div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" onclick="closeAddClubModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors">Cancel</button>
+          <button type="submit" class="bg-secondary text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">Add Club</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="api.js"></script>
   <script src="admin-dashboard.js"></script>
+  <script>
+    // Set today's date
+    const todayDateEl = document.getElementById("today-date");
+    if (todayDateEl) {
+      todayDateEl.innerText = new Date().toDateString();
+    }
+  </script>
 </body>
 </html>
